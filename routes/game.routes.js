@@ -5,14 +5,14 @@ const {
   updateGame,
   deleteGame,
   gameReview
-} = require('../controllers/Game.controller');
+} = require('../controllers/game.controller');
 
 const { gameExists } = require('../middlewares/game.middleware');
 const { protectSession } = require('../middlewares/auth.middleware');
 
 const gameRouter = express.Router();
 
-//gameRouter.use(protectSession) option 2 of middleware 
+//gameRouter.use(protectSession) option 2 of middleware
 
 gameRouter.post('/', protectSession, createGame);
 
