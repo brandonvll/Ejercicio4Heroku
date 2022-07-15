@@ -26,7 +26,7 @@ app.use(compression());
 
 //log incoming requests
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
-else app.use(morgan('combined'));
+else app.use(morgan('dev'));
 
 //Routers
 const { usersRouter } = require('./routes/user.routes');
