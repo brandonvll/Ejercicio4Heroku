@@ -51,12 +51,7 @@ const deleteGame = catchAsync(async (req, res, next) => {
 
 const gameReview = catchAsync(async (req, res, next) => {
   const { userId, gameId, comment } = req.body;
-  /*   const { gameId } = req.params;
-  const review = await Review.findOne({ where: { gameId } });
-
-  if (!review) {
-    return next(new AppError("review not found", 404));
-  } */
+  
   const newReview = await Review.create({
     userId,
     gameId,
