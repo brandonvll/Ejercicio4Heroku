@@ -6,6 +6,7 @@ const { User } = require('../models/user.model');
 const { catchAsync } = require('../utils/catchAsync.util');
 const { Review } = require('../models/review.model');
 const { AppError } = require('../utils/appError.util');
+const { Email } = require('../utils/email.util');
 
 dotenv.config({ path: './config.env' });
 
@@ -24,6 +25,8 @@ const createUser = catchAsync(async (req, res, next) => {
 
   //Remove password from response
   newUser.password = undefined;
+
+  await new Email(email).sendWelcome(name);
 
   res.status(201).json({
     status: 'success',

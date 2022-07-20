@@ -2,6 +2,7 @@ const { Game } = require('../models/game');
 const { catchAsync } = require('../utils/catchAsync.util');
 const { Review } = require('../models/review.model.js');
 const { Console } = require('../models/Console');
+const { Email } = require('../utils/email.util');
 
 const createGame = catchAsync(async (req, res, next) => {
   const { title, genre } = req.body;
@@ -10,6 +11,8 @@ const createGame = catchAsync(async (req, res, next) => {
     title,
     genre
   });
+
+  new Email().sendNewGame();
 
   res.status(201).json({
     status: 'success',

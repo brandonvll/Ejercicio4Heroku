@@ -1,8 +1,14 @@
-const path = require('path');
+const { Game } = require('../models/game');
 
-const renderIndex = (req, res, next) => {
-  const indexPath = path.join(__dirname, '..', 'Public', 'index.html');
-  res.status(200).sendFile(indexPath);
-};
+const { catchAsync } = require('../utils/catchAsync.util');
+
+const renderIndex = catchAsync(async (req, res, next) => {
+  const games = await Game.findAll();
+
+  res.status(200).render('index', {
+    title: 'Render with Pug',
+    games
+  });
+});
 
 module.exports = { renderIndex };
