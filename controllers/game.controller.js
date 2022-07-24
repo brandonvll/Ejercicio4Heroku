@@ -6,13 +6,14 @@ const { Email } = require('../utils/email.util');
 
 const createGame = catchAsync(async (req, res, next) => {
   const { title, genre } = req.body;
+  const { sessionUser } = req;
 
   const newGame = await Game.create({
     title,
     genre
   });
 
-  new Email().sendNewGame();
+  await new Email(sessionUser.email).sendNewGame(title, genre);
 
   res.status(201).json({
     status: 'success',
@@ -54,7 +55,7 @@ const deleteGame = catchAsync(async (req, res, next) => {
 
 const gameReview = catchAsync(async (req, res, next) => {
   const { userId, gameId, comment } = req.body;
-  
+
   const newReview = await Review.create({
     userId,
     gameId,

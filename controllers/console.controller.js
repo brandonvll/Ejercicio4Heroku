@@ -3,14 +3,18 @@ const { Console } = require("../models/Console");
 const { catchAsync } = require("../utils/catchAsync.util");
 const { GameInConsole } = require("../models/gameInConsole");
 const { Game } = require("../models/game");
+const { Email } = require("../utils/email.util");
 
 const createConsole = catchAsync(async (req, res, next) => {
   const { name, company } = req.body;
+  const { sessionUser } = req;
 
   const newConsole = await Console.create({
     name,
     company,
   });
+
+  await new Email(sessionUser.email).sendNewConsole(name, company);
 
   res.status(201).json({
     status: "success",

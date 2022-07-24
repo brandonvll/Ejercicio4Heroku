@@ -11,6 +11,16 @@ class Email {
   }
 
   newTransport() {
+    if (process.env.NODE_ENV === 'development') {
+      //connect to SendGrid
+      return nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+          user: 'apikey',
+          pass: process.env.SENGRID_API_KEY,
+        }
+      });
+    }
     return nodemailer.createTransport({
       host: 'smtp.mailtrap.io',
       port: 2525,
@@ -27,7 +37,7 @@ class Email {
       mailData
     );
     await this.newTransport().sendMail({
-      from: 'gamesoporte@gmail.com',
+      from: 'brandon_1998_milan@hotmail.com',
       to: this.to,
       subject,
       html,
@@ -38,8 +48,14 @@ class Email {
     await this.send('welcome', 'welcome to our app', { name });
   }
 
-  async sendNewGame() {
-    await this.send('newGame', 'you have created a new game');
+  async sendNewGame(title, genre) {
+    await this.send('newGame', 'you have created a new game', { title, genre });
+  }
+  async sendNewConsole(name, company) {
+    await this.send('newConsole', 'you have register new console', {
+      name,
+      company
+    });
   }
 }
 
