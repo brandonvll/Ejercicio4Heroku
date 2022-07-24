@@ -11,7 +11,7 @@ class Email {
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       //connect to SendGrid
       return nodemailer.createTransport({
         service: 'SendGrid',
