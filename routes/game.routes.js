@@ -10,11 +10,13 @@ const {
 const { gameExists } = require('../middlewares/game.middleware');
 const { protectSession } = require('../middlewares/auth.middleware');
 
+const { upload } = require('../utils/upload.util');
+
 const gameRouter = express.Router();
 
 //gameRouter.use(protectSession) option 2 of middleware
 
-gameRouter.post('/', protectSession, createGame);
+gameRouter.post('/', protectSession, (upload.single('GameHalo'), createGame));
 
 gameRouter.get('/', getAllGames);
 

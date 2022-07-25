@@ -8,16 +8,15 @@ const createGame = catchAsync(async (req, res, next) => {
   const { title, genre } = req.body;
   const { sessionUser } = req;
 
-  const newGame = await Game.create({
+/*   const newGame = await Game.create({
     title,
     genre
   });
 
-  await new Email(sessionUser.email).sendNewGame(title, genre);
+  await new Email(sessionUser.email).sendNewGame(title, genre); */
 
   res.status(201).json({
     status: 'success',
-    newGame
   });
 });
 

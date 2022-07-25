@@ -37,7 +37,7 @@ class Email {
       mailData
     );
     await this.newTransport().sendMail({
-      from: 'brandon_1998_milan@hotmail.com',
+      from: process.env.MAIL_FROM,
       to: this.to,
       subject,
       html,
