@@ -1,8 +1,8 @@
 const multer = require('multer');
 const path = require('path');
 
-//almacena en disco y no en la nube, osea en el servidor
-const storage = multer.diskStorage({
+//almacena en disco, osea en el servidor
+/* const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '..', 'imgs'));
   },
@@ -11,6 +11,10 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
+ */
+
+//almacena en memoria en la nube
+const storage = multer.memoryStorage()
 
 const upload = multer({ storage });
 

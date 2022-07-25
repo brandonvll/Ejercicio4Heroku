@@ -1,14 +1,24 @@
+const { ref, uploadBytes } = require('firebase/storage');
+
 const { Game } = require('../models/game');
-const { catchAsync } = require('../utils/catchAsync.util');
 const { Review } = require('../models/review.model.js');
 const { Console } = require('../models/Console');
+
 const { Email } = require('../utils/email.util');
+const { catchAsync } = require('../utils/catchAsync.util');
+const { storage } = require('../utils/firebase.util');
 
 const createGame = catchAsync(async (req, res, next) => {
   const { title, genre } = req.body;
   const { sessionUser } = req;
 
-/*   const newGame = await Game.create({
+  const imgRef = ref(storage, `${Date.now()}_${req.file.originalname}`);
+
+  const imgRes = await uploadBytes(imgRef, req.file.buffer);
+
+  console.log(imgRes);
+
+  /*   const newGame = await Game.create({
     title,
     genre
   });
@@ -16,7 +26,7 @@ const createGame = catchAsync(async (req, res, next) => {
   await new Email(sessionUser.email).sendNewGame(title, genre); */
 
   res.status(201).json({
-    status: 'success',
+    status: 'success'
   });
 });
 
