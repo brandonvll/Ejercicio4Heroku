@@ -1,4 +1,4 @@
-const { ref, uploadBytes } = require('firebase/storage');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 
 const { Game } = require('../models/game');
 const { Review } = require('../models/review.model.js');
@@ -12,25 +12,47 @@ const createGame = catchAsync(async (req, res, next) => {
   const { title, genre } = req.body;
   const { sessionUser } = req;
 
-  const imgRef = ref(storage, `${Date.now()}_${req.file.originalname}`);
-
-  const imgRes = await uploadBytes(imgRef, req.file.buffer);
-
-  console.log(imgRes);
-
-  /*   const newGame = await Game.create({
+  const newGame = await Game.create({
     title,
     genre
   });
 
-  await new Email(sessionUser.email).sendNewGame(title, genre); */
+  if (req.files.length > 0) {
+    const filesPromises = req.files?.map(async (file) => {
+      const imgRef = ref(
+        storage,
+        `games/${Date.now()}_${req.file.originalname}`
+      );
+      const imgRes = await uploadBytes(imgRef, req.file.buffer);
+
+      return await GameImg.create({
+        gameId: newGame.id,
+        imgUrl: imgRes.metadata.fullPath
+      });
+    });
+    await Promise.all(filesPromises);
+  }
+  //Send mail when game has been create
+  await new Email(sessionUser.email).sendNewGame(title, genre);
 
   res.status(201).json({
-    status: 'success'
+    status: 'success',
+    newGame
   });
 });
 
 const getAllGames = catchAsync(async (req, res, next) => {
+  //map async
+  const gameimgsPromises = game.GameImg.map(async (gameImg) => {
+    const imgRef = ref(storage, gameImg.imgUrl);
+
+    const imgFullPath = await getDownloadURL(imgRef);
+    gameImg.imgUrl = imgFullPath;
+    return gameImg;
+  });
+
+  const gameImgsResolved = await Promise.all(gameimgsPromises);
+
   const game = await Game.findAll({
     include: [{ model: Review, attributes: ['id', 'comment'] }],
     attributes: ['id', 'title', 'genre'],

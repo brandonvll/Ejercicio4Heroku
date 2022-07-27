@@ -14,7 +14,7 @@ const path = require('path');
  */
 
 //almacena en memoria en la nube
-const storage = multer.memoryStorage()
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 

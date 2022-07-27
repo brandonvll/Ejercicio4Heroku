@@ -16,7 +16,7 @@ const gameRouter = express.Router();
 
 //gameRouter.use(protectSession) option 2 of middleware
 
-gameRouter.post('/', protectSession, (upload.single('GameHalo'), createGame));
+gameRouter.post('/', protectSession, (upload.array('GameHalo',3), createGame));
 
 gameRouter.get('/', getAllGames);
 
